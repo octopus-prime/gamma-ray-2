@@ -22,10 +22,6 @@ int
 gsl_poly_solve_quartic (float a, float b, float c, float d,
 						float *x0, float *x1, float *x2, float *x3);
 
-int
-gsl_poly_solve_quartic (double a, double b, double c, double d,
-						double *x0, double *x1, double *x2, double *x3);
-
 typedef struct
 {
   size_t nc ;

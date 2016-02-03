@@ -144,11 +144,7 @@ public:
 
 	result_type operator()(surface::primitive::description_t& transformable) const
 	{
-#ifdef COL_MAJOR
 		boost::polymorphic_get<surface::primitive::base_description_t>(transformable).transformation = _transformation * boost::polymorphic_get<surface::primitive::base_description_t>(transformable).transformation;
-#else
-		boost::polymorphic_get<surface::primitive::base_description_t>(transformable).transformation *= _transformation;
-#endif
 	}
 
 	template <typename Tag>

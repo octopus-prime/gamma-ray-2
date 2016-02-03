@@ -55,7 +55,6 @@ operator*(const matrix_t& m, const float a)
 	}};
 }
 
-#ifdef COL_MAJOR
 inline vector_t
 operator*(const matrix_t& m, const vector_t& v)
 {
@@ -64,16 +63,6 @@ operator*(const matrix_t& m, const vector_t& v)
 			m[2] * v[2] +
 			m[3] * v[3];
 }
-#else
-inline vector_t
-operator*(const matrix_t& m, const vector_t& v)
-{
-	return _mm_dp_ps(m[0], v, 0b11110001) +
-			_mm_dp_ps(m[1], v, 0b11110010) +
-			_mm_dp_ps(m[2], v, 0b11110100) +
-			_mm_dp_ps(m[3], v, 0b11111000);
-}
-#endif
 
 inline vector_t
 operator*(const vector_t& v, const matrix_t& m)

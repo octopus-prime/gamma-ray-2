@@ -13,13 +13,7 @@ using namespace boost::numeric::ublas;
 
 namespace rt {
 
-#ifdef COL_MAJOR
-typedef column_major major;
-#else
-typedef row_major major;
-#endif
-
-typedef bounded_matrix<float, 4, 4, major> temp_t;
+typedef bounded_matrix<float, 4, 4, column_major> temp_t;
 
 static temp_t
 convert(const matrix_t& matrix)
@@ -51,7 +45,7 @@ matrix_t
 invert(const matrix_t& matrix)
 {
 	temp_t temp = convert(matrix);
-	temp_t result = identity_matrix<float, major>(4, 4);
+	temp_t result = identity_matrix<float, column_major>(4, 4);
 	permutation_matrix<size_t, bounded_array<size_t,4>> permutation(4);
 	lu_factorize(temp, permutation);
 	lu_substitute(temp, permutation, result);

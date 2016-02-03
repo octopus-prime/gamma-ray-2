@@ -11,10 +11,6 @@ project gamma-ray
 		<cxxflags>-Ofast
 		<cxxflags>-ffast-math
 		<include>source
-		<include>/home/mike_gresens/workspace/spirit/include
-		<include>/home/mike_gresens/workspace/polynomial/include
-		<define>COL_MAJOR
-#		<define>DBL_POLY
 		<define>NDEBUG
 		<define>BOOST_ALL_DYN_LINK
 	;
@@ -26,15 +22,15 @@ exe gamma-ray
 		[ path.glob-tree source : *.cpp ]
 		stdc++fs
 		/site-config//boost_program_options
-		/site-config//boost_filesystem
+#		/site-config//boost_filesystem
 		/site-config//boost_log
 		/site-config//boost_log_setup
 		/site-config//boost_thread
 		/site-config//boost_system
 		/site-config//tbb
 		/site-config//pthread
-		/site-config//gslcblas
-		/site-config//gsl
+#		/site-config//gslcblas
+#		/site-config//gsl
 #		/site-config//noise
 #		/site-config//freetype
 		/site-config//jpeg
