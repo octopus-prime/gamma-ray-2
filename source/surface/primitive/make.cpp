@@ -1,0 +1,69 @@
+/*
+ * make.cpp
+ *
+ *  Created on: 12.12.2015
+ *      Author: mike_gresens
+ */
+
+#include "make.hpp"
+#include "sphere/make.hpp"
+#include "plane/make.hpp"
+#include "quadric/make.hpp"
+#include "torus/make.hpp"
+#include "sor/make.hpp"
+
+namespace rt {
+namespace surface {
+namespace primitive {
+
+struct visitor : boost::static_visitor<instance_t>
+{
+	template <typename Description>
+	result_type
+	operator()(const Description& description) const;
+};
+
+instance_t
+make(const description_t& description)
+{
+	return boost::apply_visitor(visitor(), description);
+}
+
+template<>
+visitor::result_type
+visitor::operator()(const sphere::description_t& description) const
+{
+	return sphere::make(description);
+}
+
+template<>
+visitor::result_type
+visitor::operator()(const plane::description_t& description) const
+{
+	return plane::make(description);
+}
+
+template<>
+visitor::result_type
+visitor::operator()(const quadric::description_t& description) const
+{
+	return quadric::make(description);
+}
+
+template<>
+visitor::result_type
+visitor::operator()(const torus::description_t& description) const
+{
+	return torus::make(description);
+}
+
+template<>
+visitor::result_type
+visitor::operator()(const sor::description_t& description) const
+{
+	return sor::make(description);
+}
+
+}
+}
+}

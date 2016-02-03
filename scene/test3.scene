@@ -1,0 +1,108 @@
+include "test.gri"
+
+var sphere1 = Sphere {
+}
+//sphere1.scale(<0.5,1,1>)
+var sphere2 = Sphere {
+	center = <0.3,0.3,-0.5>
+}
+//var csg = sphere1 - sphere2
+//csg.scale(<2,2,2>)
+//csg.translate(<0,0,+1>)
+//csg.rotate(30 * y + 20 * z)
+
+var plane = Plane {
+	distance = -1
+}
+//plane.translate(<0,-1,0>)
+//plane.rotate(-30 * x)
+
+var cross = CylinderX + CylinderY + CylinderZ
+cross.scale(<0.5, 0.5, 0.5>)
+cross.rotate(30 * y)
+
+var csg = sphere1 - cross  - sphere2
+
+var torus = Torus {major = 2 minor = 0.5}
+//torus.rotate(5 * x)
+
+var textureR = Texture { 
+	pigment = red
+	ambient = 0.1
+	diffuse = 0.4 
+	specular = 0.4 
+	shininess = 132
+	reflection = 0.8
+}
+var textureB = Texture { 
+	pigment = blue
+	ambient = 0.1
+	diffuse = 0.5 
+	specular = 0.3 
+	shininess = 132
+	reflection = 0.8
+}
+var textureG = Texture { 
+	pigment = green
+	ambient = 0.1
+	diffuse = 0.6 
+	specular = 0.2 
+	shininess = 132
+	reflection = 0.8
+}
+var textureC = Texture { 
+	pigment = cyan
+	ambient = 0.1
+	diffuse = 0.5 
+	specular = 0.3 
+	shininess = 132
+	reflection = 0.8
+}
+var textureY = Texture { 
+	pigment = yellow
+	ambient = 0.1
+	diffuse = 0.4 
+	specular = 0.4 
+	shininess = 132
+	reflection = 0.8
+}
+
+var scene = Scene
+{
+	camera = Camera {
+		origin = -2.5 * z
+		direction = z
+	}
+	
+	lights = [
+		Light {
+			origin = <+5,+5,-5> 
+			color = 180 * white
+		}
+		
+		Light {
+			origin = <-5,+5,-5> 
+			color = 120 * white
+		}
+	]
+	
+	objects = [
+		Object { 
+			surface = csg
+//			surface = cross
+			texture = textureR
+		}
+	
+		Object { 
+			surface = torus
+			texture = textureB
+		}
+		
+/*		Object { 
+			surface = plane
+			texture = textureB
+		}*/
+	]
+}
+
+render scene

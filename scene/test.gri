@@ -1,0 +1,47 @@
+var x = <1,0,0>
+var y = <0,1,0>
+var z = <0,0,1>
+var X = <1,0,0>
+var Y = <0,1,0>
+var Z = <0,0,1>
+
+var red = <1,0,0>
+var green = <0,1,0>
+var blue = <0,0,1>
+var white = <1,1,1>
+var black = <0,0,0>
+var yellow = <1,1,0>
+var cyan = <0,1,1>
+var magenta	= <1,0,1>
+
+var aSphere = Quadric
+{
+	square =	<+1, +1, +1>
+	linear =	< 0,  0,  0>
+	absolute =	< 0,  0,  0>
+	constant =	-1
+}
+
+var CylinderX = Quadric
+{
+	square =	< 0, +1, +1>
+	linear =	< 0,  0,  0>
+	absolute =	< 0,  0,  0>
+	constant =	-1
+}
+
+var CylinderY = Quadric
+{
+	square =	<+1,  0, +1>
+	linear =	< 0,  0,  0>
+	absolute =	< 0,  0,  0>
+	constant =	-1
+}
+
+var CylinderZ = Quadric
+{
+	square =	<+1, +1,  0>
+	linear =	< 0,  0,  0>
+	absolute =	< 0,  0,  0>
+	constant =	-1
+}

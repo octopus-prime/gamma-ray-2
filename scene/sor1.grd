@@ -1,0 +1,139 @@
+// SoR example
+
+include "test.gri"
+
+var textureR = Texture { 
+	pigment = red
+	ambient = 0.1
+	diffuse = 0.4 
+	specular = 0.4 
+	shininess = 132
+	reflection = 0.1 //8
+}
+var textureB = Texture { 
+	pigment = blue
+	ambient = 0.1
+	diffuse = 0.5 
+	specular = 0.3 
+	shininess = 132
+	reflection = 0.8
+}
+var textureG = Texture { 
+	pigment = green
+	ambient = 0.1
+	diffuse = 0.6 
+	specular = 0.2 
+	shininess = 132
+	reflection = 0.8
+}
+var textureC = Texture { 
+	pigment = cyan
+	ambient = 0.1
+	diffuse = 0.5 
+	specular = 0.3 
+	shininess = 132
+	reflection = 0.8
+}
+var textureY = Texture { 
+	pigment = yellow
+	ambient = 0.1
+	diffuse = 0.4 
+	specular = 0.4 
+	shininess = 132
+	reflection = 0.8
+}
+
+var cross1 = CylinderX + CylinderY + CylinderZ
+//cross1.scale(<0.5, 0.5, 0.5>)
+cross1.rotate(30 * y)
+cross1.translate(3 * y)
+
+var cross2 = CylinderX + CylinderY + CylinderZ
+//cross1.scale(<0.5, 0.5, 0.5>)
+cross2.rotate(-15 * y)
+cross2.translate(5 * y)
+
+var xxx = SoR
+{
+	points = [ <1, 3, 0> <2, 5, 0> <3, 4, 0> <4, 2, 0> <5, 4, 0> <6, 4, 0> <7, 3, 0> ]
+}
+
+var sor = Object
+{
+	surface = xxx - cross1 - cross2
+	texture = textureR
+}
+sor.translate(<0, -4, +5>)
+
+
+var left1 = Object
+{
+	surface = Sphere { }
+	texture = textureG
+}
+left1.translate(<-3.5, +2, 0>)
+
+var left2 = Object
+{
+	surface = Sphere { }
+	texture = textureC
+}
+left2.translate(<-3.5, -2, 0>)
+
+var right1 = Object
+{
+	surface = Sphere { }
+	texture = textureB
+}
+right1.translate(<+3.5 , +2, 0>)
+
+var right2 = Object
+{
+	surface = Sphere { }
+	texture = textureY
+}
+right2.translate(<+3.5 , -2, 0>)
+
+var scene = Scene
+{
+	camera = Camera
+	{
+		origin = -5 * Z
+		direction = Z
+	}
+
+	lights =
+	[
+		Light
+		{
+			origin = <+5, +5, -5>
+			color = white * 100
+		}
+		Light
+		{
+			origin = <-5, +5, -5>
+			color = white * 100
+		}
+		Light
+		{
+			origin = <0, -1, +5>
+			color = white * 25
+		}
+		Light
+		{
+			origin = <0, +1, +5>
+			color = white * 25
+		}
+	]
+
+	objects =
+	[
+		sor
+		left1
+		right1
+		left2
+		right2
+	]
+}
+
+render scene

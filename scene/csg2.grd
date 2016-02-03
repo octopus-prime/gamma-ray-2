@@ -1,0 +1,152 @@
+// CSG example
+/*
+include "includes/constants.gri"
+include "includes/surfaces.gri"
+include "includes/textures.gri"
+*/
+
+include "test.gri"
+
+var textureR = Texture { 
+	pigment = red
+	ambient = 0.1
+	diffuse = 0.4 
+	specular = 0.4 
+	shininess = 132
+	reflection = 0.8
+}
+var textureB = Texture { 
+	pigment = blue
+	ambient = 0.1
+	diffuse = 0.5 
+	specular = 0.3 
+	shininess = 132
+	reflection = 0.8
+}
+var textureG = Texture { 
+	pigment = green
+	ambient = 0.1
+	diffuse = 0.6 
+	specular = 0.2 
+	shininess = 132
+	reflection = 0.8
+}
+var textureC = Texture { 
+	pigment = cyan
+	ambient = 0.1
+	diffuse = 0.5 
+	specular = 0.3 
+	shininess = 132
+	reflection = 0.8
+}
+var textureY = Texture { 
+	pigment = yellow
+	ambient = 0.1
+	diffuse = 0.4 
+	specular = 0.4 
+	shininess = 132
+	reflection = 0.8
+}
+
+var torusZ = Torus
+{
+	major = 2.0
+	minor = 0.5
+}
+//torusZ.rotate(180 * Y)
+
+var torusX = Torus
+{
+	major = 2.0
+	minor = 0.5
+}
+torusX.rotate(90 * Y)
+
+var torusY = Torus
+{
+	major = 2.0
+	minor = 0.5
+}
+torusY.rotate(90 * X)
+
+var sphere = Sphere
+{
+	radius = 2.0
+}
+
+var csg = Object
+{
+	surface = sphere - 
+	(torusX + torusY + torusZ)
+//	torusY + torusZ// + torusX
+	texture = textureR
+}
+csg.rotate(<0, 0, -50.0>)
+csg.rotate(<-55.0, 0, 0>)
+csg.rotate(<0.0, -30, 0>)
+//csg.rotate(<-55, -30, -50>)
+//csg.rotate(<0, 0, -50.0>).rotate(<-55.0, 0, 0>).rotate(<0.0, -30, 0>)
+//csg.translate(<0,0,1>)
+
+var left1 = Object
+{
+	surface = Sphere { }
+	texture = textureG
+}
+left1.translate(<-3.5, +2, 0>)
+
+var left2 = Object
+{
+	surface = Sphere { }
+	texture = textureC
+}
+left2.translate(<-3.5, -2, 0>)
+
+var right1 = Object
+{
+	surface = Sphere { }
+	texture = textureB
+}
+right1.translate(<+3.5 , +2, 0>)
+
+var right2 = Object
+{
+	surface = Sphere { }
+	texture = textureY
+}
+right2.translate(<+3.5 , -2, 0>)
+
+var scene = Scene
+{
+	camera = Camera
+	{
+		origin = -5 * Z
+		direction = Z
+	}
+
+	lights =
+	[
+		Light
+		{
+			origin = <+5, +5, -5>
+			color = white * 200
+		}
+		Light
+		{
+			origin = <-5, +5, -5>
+			color = white * 200
+		}
+	
+	]
+
+	objects =
+	[
+		csg
+		left1
+		right1
+		left2
+		right2
+	]
+}
+
+render scene
