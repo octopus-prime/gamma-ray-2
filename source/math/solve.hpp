@@ -12,15 +12,15 @@
 
 int
 gsl_poly_solve_quadratic (float a, float b, float c,
-		                  float *x0, float *x1);
+		                  float& x0, float& x1);
 
 int
 gsl_poly_solve_cubic (float a, float b, float c,
-                      float *x0, float *x1, float *x2);
+                      float& x0, float& x1, float& x2);
 
 int
 gsl_poly_solve_quartic (float a, float b, float c, float d,
-						float *x0, float *x1, float *x2, float *x3);
+						float& x0, float& x1, float& x2, float& x3);
 
 typedef struct
 {

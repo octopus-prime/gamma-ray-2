@@ -13,7 +13,7 @@
 #include <algorithm>
 
 int
-gsl_poly_solve_quadratic (float a, float b, float c, float *x0, float *x1)
+gsl_poly_solve_quadratic (float a, float b, float c, float& x0, float& x1)
 {
   if (a == 0.0f) /* Handle linear case */
 	{
@@ -23,7 +23,7 @@ gsl_poly_solve_quadratic (float a, float b, float c, float *x0, float *x1)
 		}
 	  else
 		{
-		  *x0 = -c / b;
+		  x0 = -c / b;
 		  return 1;
 		};
 	}
@@ -36,33 +36,33 @@ gsl_poly_solve_quadratic (float a, float b, float c, float *x0, float *x1)
 		if (b == 0.0f)
 		  {
 			float r = std::sqrt (-c / a);
-			*x0 = -r;
-			*x1 =  r;
+			x0 = -r;
+			x1 =  r;
 		  }
 		else
 		  {
 //			float sgnb = (b > 0.0f ? 1.0f : -1.0f);
 //			float temp = -0.5f * (b + sgnb * std::sqrt (disc));
 			float temp = -0.5f * (b + std::copysign(std::sqrt (disc), b));
-			float r1 = temp / a ;
-			float r2 = c / temp ;
+			x0 = temp / a ;
+			x1 = c / temp ;
 
-			if (r1 < r2)
-			  {
-				*x0 = r1 ;
-				*x1 = r2 ;
-			  }
-			else
-			  {
-				*x0 = r2 ;
-				*x1 = r1 ;
-			  }
+//			if (r1 < r2)
+//			  {
+//				x0 = r1 ;
+//				x1 = r2 ;
+//			  }
+//			else
+//			  {
+//				x0 = r2 ;
+//				x1 = r1 ;
+//			  }
 		  }
 		return 2;
 	  }
 	else if (disc == 0.0f)
 	  {
-		*x0 = *x1 = -0.5f * b / a ;
+		x0 = x1 = -0.5f * b / a ;
 		return 2 ;
 	  }
 	else
@@ -74,7 +74,7 @@ gsl_poly_solve_quadratic (float a, float b, float c, float *x0, float *x1)
 
 int
 gsl_poly_solve_cubic (float a, float b, float c,
-                      float *x0, float *x1, float *x2)
+                      float& x0, float& x1, float& x2)
 {
   float q = (a * a - 3 * b);
   float r = (2 * a * a * a - 9 * a * b + 27 * c);
@@ -90,9 +90,9 @@ gsl_poly_solve_cubic (float a, float b, float c,
 
   if (R == 0 && Q == 0)
     {
-      *x0 = - a / 3 ;
-      *x1 = - a / 3 ;
-      *x2 = - a / 3 ;
+      x0 = - a / 3 ;
+      x1 = - a / 3 ;
+      x2 = - a / 3 ;
       return 3 ;
     }
   else if (CR2 == CQ3)
@@ -108,15 +108,15 @@ gsl_poly_solve_cubic (float a, float b, float c,
 
       if (R > 0)
         {
-          *x0 = -2 * sqrtQ  - a / 3;
-          *x1 = sqrtQ - a / 3;
-          *x2 = sqrtQ - a / 3;
+          x0 = -2 * sqrtQ  - a / 3;
+          x1 = sqrtQ - a / 3;
+          x2 = sqrtQ - a / 3;
         }
       else
         {
-          *x0 = - sqrtQ  - a / 3;
-          *x1 = - sqrtQ - a / 3;
-          *x2 = 2 * sqrtQ - a / 3;
+          x0 = - sqrtQ  - a / 3;
+          x1 = - sqrtQ - a / 3;
+          x2 = 2 * sqrtQ - a / 3;
         }
       return 3 ;
     }
@@ -127,22 +127,22 @@ gsl_poly_solve_cubic (float a, float b, float c,
 //      float ratio = std::copysign(std::sqrt (R2 / Q3), R);
       float theta = std::acos (ratio);
       float norm = -2 * std::sqrt (Q);
-      *x0 = norm * std::cos (theta / 3) - a / 3;
-      *x1 = norm * std::cos ((theta + 2 * M_PI) / 3) - a / 3;
-      *x2 = norm * std::cos ((theta - 2 * M_PI) / 3) - a / 3;
+      x0 = norm * std::cos (theta / 3) - a / 3;
+      x1 = norm * std::cos ((theta + 2 * M_PI) / 3) - a / 3;
+      x2 = norm * std::cos ((theta - 2 * M_PI) / 3) - a / 3;
 
-      /* Sort *x0, *x1, *x2 into increasing order */
+      /* Sort x0, x1, x2 into increasing order */
 
-      if (*x0 > *x1)
-        std::swap(*x0, *x1) ;
-
-      if (*x1 > *x2)
-        {
-          std::swap(*x1, *x2) ;
-
-          if (*x0 > *x1)
-            std::swap(*x0, *x1) ;
-        }
+//      if (x0 > x1)
+//        std::swap(x0, x1) ;
+//
+//      if (x1 > x2)
+//        {
+//          std::swap(x1, x2) ;
+//
+//          if (x0 > x1)
+//            std::swap(x0, x1) ;
+//        }
 
       return 3;
     }
@@ -152,14 +152,14 @@ gsl_poly_solve_cubic (float a, float b, float c,
       float A = -sgnR * std::cbrt (std::fabs (R) + std::sqrt (R2 - Q3) );
 //      float A = -std::copysign(std::cbrt (std::fabs (R) + std::sqrt (R2 - Q3) ), R);
       float B = Q / A ;
-      *x0 = A + B - a / 3;
+      x0 = A + B - a / 3;
       return 1;
     }
 }
 
 int
 gsl_poly_solve_quartic (float a, float b, float c, float d,
-						float *x0, float *x1, float *x2, float *x3)
+						float& x0, float& x1, float& x2, float& x3)
 {
   /*
    * This code is based on a simplification of
@@ -181,17 +181,17 @@ gsl_poly_solve_quartic (float a, float b, float c, float d,
 		{
 		  if (a > 0.0f)
 			{
-			  *x0 = -a;
-			  *x1 = 0.0f;
-			  *x2 = 0.0f;
-			  *x3 = 0.0f;
+			  x0 = -a;
+			  x1 = 0.0f;
+			  x2 = 0.0f;
+			  x3 = 0.0f;
 			}
 		  else
 			{
-			  *x0 = 0.0f;
-			  *x1 = 0.0f;
-			  *x2 = 0.0f;
-			  *x3 = -a;
+			  x0 = 0.0f;
+			  x1 = 0.0f;
+			  x2 = 0.0f;
+			  x3 = -a;
 			}
 		  return 4;
 		}
@@ -203,8 +203,8 @@ gsl_poly_solve_quartic (float a, float b, float c, float d,
 			}
 		  else
 			{
-			  *x1 = sqrtf (sqrtf (-d));
-			  *x0 = -(*x1);
+			  x1 = sqrtf (sqrtf (-d));
+			  x0 = -(x1);
 			  return 2;
 			}
 		}
@@ -212,8 +212,8 @@ gsl_poly_solve_quartic (float a, float b, float c, float d,
 
   if (0.0f == c && 0.0f == d)
 	{
-	  *x0=0.0f;
-	  *x1=0.0f;
+	  x0=0.0f;
+	  x1=0.0f;
 	  if (gsl_poly_solve_quadratic(1.0f,a,b,x2,x3)==0) {
 	mt=3;
 	  } else {
@@ -426,10 +426,10 @@ gsl_poly_solve_quartic (float a, float b, float c, float d,
 		  if (u[k1] >= 0.f && u[k2] >= 0.f)
 			{
 			  mt = 1;
-		  *x0 = zarr[0];
-		  *x1 = zarr[1];
-		  *x2 = zarr[2];
-		  *x3 = zarr[3];
+		  x0 = zarr[0];
+		  x1 = zarr[1];
+		  x2 = zarr[2];
+		  x3 = zarr[3];
 			}
 	  else
 		{
@@ -438,8 +438,8 @@ gsl_poly_solve_quartic (float a, float b, float c, float d,
 	}
 	  else
 		{
-	  *x0 = zarr[0];
-	  *x1 = zarr[1];
+	  x0 = zarr[0];
+	  x1 = zarr[1];
 		}
 	}
 
@@ -447,28 +447,28 @@ gsl_poly_solve_quartic (float a, float b, float c, float d,
   if (1 == mt)
 	{
 	  /* Roots are all real, sort them by the real part */
-//	  if (*x0 > *x1)
-//		  std::swap (*x0, *x1);
-//	  if (*x0 > *x2)
-//		  std::swap (*x0, *x2);
-//	  if (*x0 > *x3)
-//		  std::swap (*x0, *x3);
+//	  if (x0 > x1)
+//		  std::swap (x0, x1);
+//	  if (x0 > x2)
+//		  std::swap (x0, x2);
+//	  if (x0 > x3)
+//		  std::swap (x0, x3);
 //
-//	  if (*x1 > *x2)
-//		  std::swap (*x1, *x2);
-//	  if (*x2 > *x3)
+//	  if (x1 > x2)
+//		  std::swap (x1, x2);
+//	  if (x2 > x3)
 //		{
-//		  std::swap (*x2, *x3);
-//		  if (*x1 > *x2)
-//			  std::swap (*x1, *x2);
+//		  std::swap (x2, x3);
+//		  if (x1 > x2)
+//			  std::swap (x1, x2);
 //		}
 	  return 4;
 	}
   else
 	{
 	  /* 2 real roots */
-//	  if (*x0 > *x1)
-//		  std::swap (*x0, *x1);
+//	  if (x0 > x1)
+//		  std::swap (x0, x1);
 	}
 
   return 2;
