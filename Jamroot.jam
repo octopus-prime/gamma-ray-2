@@ -15,14 +15,11 @@ project gamma-ray
 		<define>BOOST_ALL_DYN_LINK
 	;
 
-lib stdc++fs ;
-
 exe gamma-ray
 	:
 		[ path.glob-tree source : *.cpp ]
-		stdc++fs
 		/site-config//boost_program_options
-#		/site-config//boost_filesystem
+		/site-config//boost_filesystem
 		/site-config//boost_log
 		/site-config//boost_log_setup
 		/site-config//boost_thread

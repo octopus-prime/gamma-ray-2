@@ -10,9 +10,6 @@
 #include <tbb/enumerable_thread_specific.h>
 #include <tbb/parallel_for.h>
 #include <tbb/blocked_range2d.h>
-//#include <chrono>
-//
-//using namespace std::chrono;
 
 namespace rt {
 namespace rendering {
@@ -148,8 +145,11 @@ renderer_t make_renderer(const size_t width, const size_t height, const size_t d
 			const scene::camera::instance_t& camera = scene.camera();
 
 			image_t image(width, height);
+#if TBB_VERSION_MINOR >= 3
 			tbb::enumerable_thread_specific<hits_t> hits(1000);
-//			const auto t0 = system_clock::now();
+#else
+			tbb::enumerable_thread_specific<hits_t> hits(hits_t(1000));
+#endif
 			tbb::parallel_for
 			(
 				tbb::blocked_range2d<size_t, size_t>(0, height, 0, width),
@@ -178,9 +178,6 @@ renderer_t make_renderer(const size_t width, const size_t height, const size_t d
 					done += range.rows().size() * range.cols().size();
 				}
 			);
-//			const auto t1 = system_clock::now();
-//
-//			std::cout << "t = " << duration_cast<milliseconds>(t1 - t0).count() << " ms" << std::endl;
 
 			return std::move(image);
 		};
@@ -194,8 +191,11 @@ renderer_t make_renderer(const size_t width, const size_t height, const size_t d
 			const scene::camera::instance_t& camera = scene.camera();
 
 			image_t image(width, height);
+#if TBB_VERSION_MINOR >= 3
 			tbb::enumerable_thread_specific<hits_t> hits(1000);
-//			const auto t0 = system_clock::now();
+#else
+			tbb::enumerable_thread_specific<hits_t> hits(hits_t(1000));
+#endif
 			tbb::parallel_for
 			(
 				tbb::blocked_range2d<size_t, size_t>(0, height, 0, width),
@@ -217,9 +217,6 @@ renderer_t make_renderer(const size_t width, const size_t height, const size_t d
 					done += range.rows().size() * range.cols().size();
 				}
 			);
-//			const auto t1 = system_clock::now();
-//
-//			std::cout << "t = " << duration_cast<milliseconds>(t1 - t0).count() << " ms" << std::endl;
 
 			return std::move(image);
 		};

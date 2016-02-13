@@ -17,13 +17,11 @@
 #include <boost/gil/extension/io/jpeg_io.hpp>
 #include <boost/gil/extension/io/png_io.hpp>
 #include <boost/gil/extension/io/tiff_io.hpp>
-//#include <boost/filesystem.hpp>
-#include <experimental/filesystem>
-#include <experimental/type_traits>
+#include <boost/filesystem.hpp>
 #include <unordered_map>
 #include <iostream>
 
-namespace fs = std::experimental::filesystem;//boost::filesystem;
+namespace fs = boost::filesystem;
 namespace gil = boost::gil;
 
 namespace rt {
