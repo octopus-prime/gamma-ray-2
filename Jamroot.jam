@@ -29,7 +29,7 @@ exe gamma-ray
 #		/site-config//gslcblas
 #		/site-config//gsl
 #		/site-config//noise
-#		/site-config//freetype
+		/site-config//freetype
 		/site-config//jpeg
 		/site-config//png
 		/site-config//tiff

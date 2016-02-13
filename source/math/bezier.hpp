@@ -46,7 +46,7 @@ differentiate(const basic_bezier_t<N>& bezier)
 		result.begin(),
 		[](const vector_t& p0, const vector_t& p1)
 		{
-			return N * (p1 - p0);
+			return float(N) * (p1 - p0);
 		}
 	);
 	return result;
@@ -63,7 +63,7 @@ to_polynomial(const basic_bezier_t<N>& bezier)
 	{
 		const float njF = boost::math::factorial<float>(n - j);
 		const float factor = nF / njF;
-		vector_t sum(0);
+		vector_t sum {0, 0, 0, 0};
 		for (std::size_t i = 0; i <= j; ++i)
 		{
 			const float s = std::pow(-1.0f, i + j);

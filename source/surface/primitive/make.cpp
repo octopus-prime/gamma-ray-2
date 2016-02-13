@@ -12,6 +12,7 @@
 #include "torus/make.hpp"
 #include "sor/make.hpp"
 #include "box/make.hpp"
+#include "text/make.hpp"
 
 namespace rt {
 namespace surface {
@@ -70,6 +71,13 @@ visitor::result_type
 visitor::operator()(const box::description_t& description) const
 {
 	return box::make(description);
+}
+
+template<>
+visitor::result_type
+visitor::operator()(const text::description_t& description) const
+{
+	return text::make(description);
 }
 
 }
