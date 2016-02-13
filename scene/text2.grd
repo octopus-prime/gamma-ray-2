@@ -50,11 +50,11 @@ var textureY = Texture {
 
 var text1 = Object
 {
-	surface = XTextY
+	surface = TextX
 	{
-		glyphs = "是本文"
-//		glyphs = "菁爱迈克"
-//		glyphs = "伽马射线"
+		text = "是本文"
+//		text = "菁爱迈克"
+//		text = "伽马射线"
 		font = "/usr/share/fonts/truetype/fonts-japanese-gothic.ttf"
 //		font = "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc"
 		extrusion = 1.0
