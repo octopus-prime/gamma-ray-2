@@ -17,10 +17,8 @@
 
 namespace rt {
 
-typedef float coeff_t;
-
 template <std::size_t N>
-using basic_polynomial_t = std::array<coeff_t, N>;
+using basic_polynomial_t = std::array<float, N>;
 
 typedef basic_polynomial_t<2> polynomial1_t;
 typedef basic_polynomial_t<3> polynomial2_t;
@@ -41,7 +39,7 @@ operator-=(basic_polynomial_t<M>& polynomial1, const basic_polynomial_t<N>& poly
 		polynomial2.begin(), polynomial2.end(),
 		polynomial1.begin(),
 		polynomial1.begin(),
-		std::bind(std::minus<coeff_t>(), std::placeholders::_2, std::placeholders::_1)
+		std::bind(std::minus<float>(), std::placeholders::_2, std::placeholders::_1)
 	);
 	return polynomial1;
 }
@@ -77,13 +75,13 @@ operator/(const basic_polynomial_t<M>& polynomial1, const basic_polynomial_t<N>&
 
 template <std::size_t N>
 inline auto
-evaluate(const basic_polynomial_t<N>& polynomial, const coeff_t x)
+evaluate(const basic_polynomial_t<N>& polynomial, const float x)
 {
 	return std::accumulate
 	(
 		polynomial.crbegin() + 1, polynomial.crend(),
 		polynomial.back(),
-		std::bind(std::fma<coeff_t,coeff_t,coeff_t>, x, std::placeholders::_1, std::placeholders::_2)
+		std::bind(std::fma<float,float,float>, x, std::placeholders::_1, std::placeholders::_2)
 	);
 }
 
@@ -101,26 +99,26 @@ template <typename Iterator>
 bool
 bairstow(const Iterator begin, const Iterator end, polynomial2_t& a)
 {
-	constexpr coeff_t e = 1e-3;
+	constexpr float e = 1e-3;
 	constexpr std::size_t I = 100;
 
 	for (std::size_t i = 0; i < I; ++i)
 	{
-		coeff_t b0 = *begin;
-		coeff_t b1 = 0;
-		coeff_t q0 = 0;
-		coeff_t q1 = 0;
+		float b0 = *begin;
+		float b1 = 0;
+		float q0 = 0;
+		float q1 = 0;
 
 		std::for_each
 		(
 			begin + 1, end,
-			[&](const coeff_t ci)
+			[&](const float ci)
 			{
-				const coeff_t b2 = b1;
+				const float b2 = b1;
 				b1 = b0;
 				b0 = ci - a[1] * b1 - a[0] * b2;
 
-				const coeff_t q2 = q1;
+				const float q2 = q1;
 				q1 = q0;
 				q0 = b2 - a[1] * q1 - a[0] * q2;
 			}
@@ -129,10 +127,10 @@ bairstow(const Iterator begin, const Iterator end, polynomial2_t& a)
 		if (std::abs(b0) < e && std::abs(b1) < e)
 			return true;
 
-		const coeff_t M  =  -a[0] * q1 - a[1]  * q0;
-		const coeff_t D  =  q0 * q0 - M  * q1;
-		const coeff_t da1 = (b0 * q1 - b1 * q0) / D;
-		const coeff_t da0 = (b1 * M  - b0 * q0) / D;
+		const float M  =  -a[0] * q1 - a[1]  * q0;
+		const float D  =  q0 * q0 - M  * q1;
+		const float da1 = (b0 * q1 - b1 * q0) / D;
+		const float da0 = (b1 * M  - b0 * q0) / D;
 
 		a[1] -= da1;
 		a[0] -= da0;
@@ -199,11 +197,11 @@ solve(const basic_polynomial_t<N>& polynomial, Iterator iterator)
 	else
 	{
 		constexpr std::size_t M = N - 1;
-		std::array<std::complex<coeff_t>, M> roots;
-		std::array<coeff_t, M * M> matrix;
+		std::array<std::complex<float>, M> roots;
+		std::array<float, M * M> matrix;
 		gsl_poly_complex_workspace_float workspace {M, matrix.data()};
-		if (gsl_poly_complex_solve(polynomial.data(), N, &workspace, reinterpret_cast<coeff_t*>(roots.data())) == 0)
-			for (const std::complex<coeff_t>& root : roots)
+		if (gsl_poly_complex_solve(polynomial.data(), N, &workspace, reinterpret_cast<float*>(roots.data())) == 0)
+			for (const std::complex<float>& root : roots)
 				if (std::imag(root) == 0.0f)
 					*iterator++ = std::real(root);
 	}

@@ -31,14 +31,14 @@ make(const description_t& description)
 		const spline_segment_t& segment = spline[i];
 		const polynomial5_t derivation = differentiate(std::get<2>(segment) * std::get<2>(segment));
 
-		const coeff_t delta = std::get<1>(segment) - std::get<0>(segment);
-		coeff_t max = std::max
+		const float delta = std::get<1>(segment) - std::get<0>(segment);
+		float max = std::max
 		(
 			evaluate(std::get<2>(segment), 0.0f),
 			evaluate(std::get<2>(segment), delta)
 		);
 
-		std::array<coeff_t, 5> roots;
+		std::array<float, 5> roots;
 		const auto end = solve(derivation, roots.begin());
 		for (auto root = roots.begin(); root != end; ++root)
 			if (*root >= 0.0f && *root <= delta)
@@ -53,12 +53,6 @@ make(const description_t& description)
 			point_t(-max, std::get<0>(segment), -max),
 			point_t(+max, std::get<1>(segment), +max)
 		);
-
-//		const box_t box
-//		(
-//			vector_t {-max, std::get<0>(segment), -max},
-//			vector_t {+max, std::get<1>(segment), +max}
-//		);
 
 		derivations.emplace_back(derivation);
 		rtree.insert(value_t(box, i));
