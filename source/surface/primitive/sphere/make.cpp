@@ -9,6 +9,7 @@
 #include "model.hpp"
 #include "../../../math/transformation.hpp"
 #include "../instance.hpp"
+#include <boost/log/trivial.hpp>
 
 namespace rt {
 namespace surface {
@@ -18,6 +19,8 @@ namespace sphere {
 instance_t
 make(const description_t& description)
 {
+	BOOST_LOG_TRIVIAL(debug) << "Make surface sphere";
+
 	matrix_t transformation = identity;
 	if (description.radius)
 	{

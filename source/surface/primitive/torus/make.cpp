@@ -9,6 +9,7 @@
 #include "model.hpp"
 #include "../../../math/transformation.hpp"
 #include "../instance.hpp"
+#include <boost/log/trivial.hpp>
 
 namespace rt {
 namespace surface {
@@ -18,6 +19,8 @@ namespace torus {
 instance_t
 make(const description_t& description)
 {
+	BOOST_LOG_TRIVIAL(debug) << "Make surface torus";
+
 	const float max = description.major + description.minor;
 	box_t box(point_t(-max, -max, -description.minor), point_t(+max, +max, +description.minor));
 	model_t model(description.major, description.minor, std::move(box));

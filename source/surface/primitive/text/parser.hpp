@@ -30,9 +30,10 @@ namespace text {
 x3::rule<class description_rule, description_t> const description_rule = "Text";
 
 auto const description_rule_def =
-		x3::lit("XTextY") > x3::lit('{')
+		//TODO: How to fix parse errors if using "Text"?!
+		x3::lit("TextX") > x3::lit('{')
 		>
-		x3::lit("glyphs") > x3::lit('=') > parsing::filename::rule
+		x3::lit("text") > x3::lit('=') > parsing::filename::rule
 		>
 		x3::lit("font") > x3::lit('=') > parsing::filename::rule
 		>

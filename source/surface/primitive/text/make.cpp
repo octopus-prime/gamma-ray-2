@@ -9,6 +9,7 @@
 #include "model.hpp"
 #include "../instance.hpp"
 #include <boost/regex/pending/unicode_iterator.hpp>
+#include <boost/log/trivial.hpp>
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
@@ -157,6 +158,8 @@ get_glyph(const Face& face, const char32_t ch, const std::size_t sizeX, const st
 instance_t
 make(const description_t& description)
 {
+	BOOST_LOG_TRIVIAL(debug) << "Make surface text";
+
 	const std::u32string text
 	(
 		boost::u8_to_u32_iterator<std::string::const_iterator>(description.text.cbegin()),
