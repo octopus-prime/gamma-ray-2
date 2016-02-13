@@ -49,17 +49,16 @@ var textureY = Texture {
 }
 
 var sphere = Sphere {}
-/*
-var cube = Cube {}
-cube.scale(<0.75, 0.75, 0.75>)
-*/
+
+var box = Box {}
+box.scale(<0.75, 0.75, 0.75>)
+
 var cross = CylinderX + CylinderY + CylinderZ
 cross.scale(<0.5, 0.5, 0.5>)
 
 var csg = Object
 {
-//	surface = (sphere & cube) - cross
-	surface = sphere - cross
+	surface = sphere & box - cross
 	texture = textureR
 }
 //csg.rotate(< 45, 45, 0>)

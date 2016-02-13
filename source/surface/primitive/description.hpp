@@ -12,6 +12,7 @@
 #include "quadric/description.hpp"
 #include "torus/description.hpp"
 #include "sor/description.hpp"
+#include "box/description.hpp"
 #include <boost/variant.hpp>
 
 namespace rt {
@@ -24,7 +25,8 @@ typedef boost::variant
 	plane::description_t,
 	quadric::description_t,
 	torus::description_t,
-	sor::description_t
+	sor::description_t,
+	box::description_t
 >
 description_t;
 

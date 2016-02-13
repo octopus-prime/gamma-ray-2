@@ -11,6 +11,7 @@
 #include "quadric/make.hpp"
 #include "torus/make.hpp"
 #include "sor/make.hpp"
+#include "box/make.hpp"
 
 namespace rt {
 namespace surface {
@@ -62,6 +63,13 @@ visitor::result_type
 visitor::operator()(const sor::description_t& description) const
 {
 	return sor::make(description);
+}
+
+template<>
+visitor::result_type
+visitor::operator()(const box::description_t& description) const
+{
+	return box::make(description);
 }
 
 }
