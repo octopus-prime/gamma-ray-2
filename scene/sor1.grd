@@ -1,6 +1,6 @@
 // SoR example
 
-include "test.gri"
+include "scene/test.gri"
 
 var textureR = Texture { 
 	pigment = red

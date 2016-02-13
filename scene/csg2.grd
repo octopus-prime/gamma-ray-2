@@ -5,7 +5,7 @@ include "includes/surfaces.gri"
 include "includes/textures.gri"
 */
 
-include "test.gri"
+include "scene/test.gri"
 
 var textureR = Texture { 
 	pigment = red
