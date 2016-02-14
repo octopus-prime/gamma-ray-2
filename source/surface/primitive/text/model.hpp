@@ -16,7 +16,6 @@
 #include <boost/iterator/filter_iterator.hpp>
 #include <boost/function_output_iterator.hpp>
 #include <boost/range/numeric.hpp>
-//#include <boost/algorithm/cxx11/any_of.hpp>
 #include <vector>
 
 namespace rt {
@@ -94,7 +93,6 @@ protected:
 			transformed.begin(),
 			[this](const vector_t& C)
 			{
-//				return _dy * C[X] - _dx * C[Y];
 				return _dy * C[0] - _dx * C[1];
 			}
 		);
@@ -146,7 +144,7 @@ public:
 	rendering::hits_t::iterator
 	hit(const rendering::ray_t& ray, rendering::hits_t::iterator hits) const
 	{
-		if (std::fabs(ray.direction[X]) < std::numeric_limits<float>::epsilon() && std::fabs(ray.direction[Y]) < std::numeric_limits<float>::epsilon())
+		if (std::abs(ray.direction[X]) < std::numeric_limits<float>::epsilon() && std::abs(ray.direction[Y]) < std::numeric_limits<float>::epsilon())
 			return hits;
 
 		const solve_contour_visitor solver
@@ -235,7 +233,7 @@ public:
 	rendering::hits_t::iterator
 	hit(const rendering::ray_t& ray, rendering::hits_t::iterator hits) const
 	{
-		if (std::fabs(ray.direction[Z]) > std::numeric_limits<float>::epsilon())
+		if (std::abs(ray.direction[Z]) > std::numeric_limits<float>::epsilon())
 		{
 			const float distance1 = -ray.origin[Z] / ray.direction[Z];
 			if (ray.min < distance1 && distance1 < ray.max)
@@ -298,17 +296,6 @@ public:
 				return glyph.inside(point);
 			}
 		);
-
-//		return boost::algorithm::any_of
-//		(
-//			_glyphs,
-//			std::bind
-//			(
-//				&glyph_t::inside,
-//				std::placeholders::_1,
-//				point
-//			)
-//		);
 	}
 
 private:
