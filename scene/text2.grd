@@ -54,7 +54,7 @@ cylinder.translate(<0,2,0>)
 
 var text1 = Object
 {
-	surface = TextX
+	surface = Text
 	{
 		text = "是本文"
 //		text = "菁爱迈克"

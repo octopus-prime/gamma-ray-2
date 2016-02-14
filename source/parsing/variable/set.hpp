@@ -45,9 +45,9 @@ auto const set_rule_def =
 auto const variable_rule_def =
 	vector::rule
 	|
-	surface::rule
-	|
 	texture::rule
+	|
+	surface::rule
 	|
 	scene::camera::rule
 	|
