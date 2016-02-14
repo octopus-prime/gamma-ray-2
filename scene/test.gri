@@ -45,3 +45,48 @@ var CylinderZ = Quadric
 	absolute =	< 0,  0,  0>
 	constant =	-1
 }
+
+var textureR = Texture { 
+	pigment = red
+	ambient = 0.1
+	diffuse = 0.4 
+	specular = 0.4 
+	shininess = 132
+	reflection = 0.8
+}
+
+var textureB = Texture { 
+	pigment = blue
+	ambient = 0.1
+	diffuse = 0.5 
+	specular = 0.3 
+	shininess = 132
+	reflection = 0.8
+}
+
+var textureG = Texture { 
+	pigment = green
+	ambient = 0.1
+	diffuse = 0.6 
+	specular = 0.2 
+	shininess = 132
+	reflection = 0.8
+}
+
+var textureC = Texture { 
+	pigment = cyan
+	ambient = 0.1
+	diffuse = 0.5 
+	specular = 0.3 
+	shininess = 132
+	reflection = 0.8
+}
+
+var textureY = Texture { 
+	pigment = yellow
+	ambient = 0.1
+	diffuse = 0.4 
+	specular = 0.4 
+	shininess = 132
+	reflection = 0.8
+}

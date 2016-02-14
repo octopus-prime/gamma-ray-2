@@ -21,6 +21,8 @@
 namespace rt {
 namespace parsing {
 
+typedef boost::spirit::istream_iterator iterator_t;
+
 template <typename Type, typename Rule>
 class parser_t
 {
@@ -34,8 +36,6 @@ public:
 
 	Type operator()(const std::string& file) const
 	{
-		typedef boost::spirit::istream_iterator iterator_t;
-
 		std::ifstream stream(file);
 		stream.unsetf(std::ios::skipws);
 
@@ -72,6 +72,7 @@ make_parser(const Rule& rule, variable::descriptions_t& variables)
 
 x3::rule<class def_rule> const def_rule ="Definition";
 x3::rule<class include_rule> const include_rule = "Include";
+x3::rule<class render_rule, scene::description_t> const render_rule = "Render";
 
 auto const def_rule_def =
 		variable::set::rule
@@ -91,7 +92,7 @@ auto const include_action = [](auto& ctx)
 		const auto parse = make_parser<x3::unused_type>(*def_rule, variables);
 		return parse(file);
 	}
-	catch (const x3::expectation_failure<std::string::iterator>& failure)
+	catch (const x3::expectation_failure<iterator_t>& failure)
 	{
 		boost::format what("Expected %s but got %s");
 		what % failure.which();
@@ -104,7 +105,11 @@ auto const include_rule_def =
 		(x3::lit("include") > filename::rule) [include_action]
 ;
 
-BOOST_SPIRIT_DEFINE(def_rule, include_rule);
+auto const render_rule_def =
+		x3::lit("render") > x3::lit('(') > scene::rule > x3::lit(')')
+;
+
+BOOST_SPIRIT_DEFINE(def_rule, include_rule, render_rule);
 
 scene::description_t
 parse(const std::string& file)
@@ -113,10 +118,10 @@ parse(const std::string& file)
 	try
 	{
 		BOOST_LOG_TRIVIAL(debug) << "Parse file " << '"' << file << '"';
-		const auto parse = make_parser<scene::description_t>(*def_rule > x3::lit("render") > scene::rule, variables);
+		const auto parse = make_parser<scene::description_t>(*def_rule > render_rule, variables);
 		return parse(file);
 	}
-	catch (const x3::expectation_failure<std::string::iterator>& failure)
+	catch (const x3::expectation_failure<iterator_t>& failure)
 	{
 		boost::format what("Expected %s but got %s");
 		what % failure.which();
