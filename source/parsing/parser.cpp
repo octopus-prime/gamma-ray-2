@@ -12,8 +12,7 @@
 #include "skipper.hpp"
 #include "identifier.hpp"
 #include "filename.hpp"
-#include "../math/transformation.hpp"
-#include <boost/variant/polymorphic_get.hpp>
+#include "transformation.hpp"
 #include <boost/format.hpp>
 #include <boost/log/trivial.hpp>
 #include <fstream>
@@ -85,14 +84,13 @@ make_parser(const Rule& rule, variable::descriptions_t& variables)
 
 x3::rule<class def_rule> const def_rule ="Definition";
 x3::rule<class include_rule> const include_rule = "Include";
-x3::rule<class transform_rule> const transform_rule = "Transform";
 
 auto const def_rule_def =
 		variable::set::rule
 		|
 		include_rule
 		|
-		transform_rule
+		transformation::rule
 ;
 
 auto const include_action = [](auto& ctx)
@@ -115,71 +113,7 @@ auto const include_rule_def =
 		(x3::lit("include") > filename::rule) [include_action]
 ;
 
-class transformation_visitor
-:
-	public boost::static_visitor<>
-{
-public:
-	transformation_visitor(const matrix_t& transformation)
-	:
-		_transformation(transformation)
-	{
-	}
-
-	template <typename T>
-	result_type operator()(T& transformable) const
-	{
-		throw std::runtime_error("Not transformable ");
-	}
-
-	result_type operator()(scene::object::description_t& transformable) const
-	{
-		(*this)(transformable.surface);
-	}
-
-	result_type operator()(surface::description_t& transformable) const
-	{
-		boost::apply_visitor(*this, transformable);
-	}
-
-	result_type operator()(surface::primitive::description_t& transformable) const
-	{
-		boost::polymorphic_get<surface::primitive::base_description_t>(transformable).transformation = _transformation * boost::polymorphic_get<surface::primitive::base_description_t>(transformable).transformation;
-	}
-
-	template <typename Tag>
-	result_type operator()(surface::csg::description_t<Tag>& transformable) const
-	{
-		(*this)(transformable.surface1);
-		(*this)(transformable.surface2);
-	}
-
-private:
-	const matrix_t& _transformation;
-};
-
-auto const transform = [](auto& ctx)
-{
-	auto& transformable = *boost::fusion::at_c<0>(x3::_attr(ctx));
-	const auto transformation = boost::fusion::at_c<1>(x3::_attr(ctx));
-	vector_t vector = boost::fusion::at_c<2>(x3::_attr(ctx));
-	const matrix_t matrix = transformation(vector);
-	const transformation_visitor visitor(matrix);
-	boost::apply_visitor(visitor, transformable);
-};
-
-const x3::symbols<decltype(translation)*> transformation
-{
-	{"translate", &translation},
-	{"rotate", &rotation},
-	{"scale", &scaling}
-};
-
-auto const transform_rule_def =
-		(variable::get::rule > x3::lit('.') > transformation > x3::lit('(') > vector::rule > x3::lit(')')) [transform]
-;
-
-BOOST_SPIRIT_DEFINE(def_rule, include_rule, transform_rule);
+BOOST_SPIRIT_DEFINE(def_rule, include_rule);
 
 scene::description_t
 parse(const std::string& file)
