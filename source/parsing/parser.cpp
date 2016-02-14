@@ -13,6 +13,7 @@
 #include "identifier.hpp"
 #include "filename.hpp"
 #include "transformation.hpp"
+#include <boost/spirit/include/support_istream_iterator.hpp>
 #include <boost/format.hpp>
 #include <boost/log/trivial.hpp>
 #include <fstream>
@@ -33,41 +34,28 @@ public:
 
 	Type operator()(const std::string& file) const
 	{
-//		BOOST_LOG_TRIVIAL(debug) << "Parse file " << '"' << file << '"';
+		typedef boost::spirit::istream_iterator iterator_t;
 
 		std::ifstream stream(file);
 		stream.unsetf(std::ios::skipws);
 
-		std::string text;
-		std::copy(std::istream_iterator<char>(stream), std::istream_iterator<char>(), std::back_inserter(text));
-
 		scene::description_t description;
+
 		auto rule = x3::with<variable::tag>(std::ref(_variables)) [x3::eps > _rule];
+		iterator_t iterator(stream);
 
-//		try
-//		{
-			auto iter = text.begin();
+		const bool ok = x3::phrase_parse
+		(
+			iterator, iterator_t(),
+			rule,
+			skipper::rule,
+			description
+		);
 
-			const bool ok = x3::phrase_parse
-			(
-				iter, text.end(),
-				rule,
-				skipper::rule,
-				description
-			);
+		if (!ok || iterator != iterator_t())
+			throw std::runtime_error("Parsing failed.");
 
-			if (!ok || iter != text.end())
-				throw std::runtime_error("Parsing failed.");
-//		}
-//		catch (const x3::expectation_failure<std::string::iterator>& failure)
-//		{
-//			boost::format what("Expected %s but got %s");
-//			what % failure.which();
-//			what % std::string(failure.where(), text.end());
-//			throw std::runtime_error(what.str());
-//		}
-
-		return description;
+		return std::move(description);
 	}
 
 private:
@@ -96,17 +84,20 @@ auto const def_rule_def =
 auto const include_action = [](auto& ctx)
 {
 	variable::descriptions_t& variables = x3::get<variable::tag>(ctx);
-	const auto parser = make_parser<x3::unused_type>(*def_rule, variables);
 	const auto& file = x3::_attr(ctx);
-//	try
-//	{
-//	BOOST_LOG_TRIVIAL(debug) << "Parse file " << '"' << file << '"';
-//	}
-//	catch (...)
-//	{
-//		std::cerr << "Foo1" << std::endl;
-//	}
-	return parser(file);
+	try
+	{
+		BOOST_LOG_TRIVIAL(debug) << "Parse file " << '"' << file << '"';
+		const auto parse = make_parser<x3::unused_type>(*def_rule, variables);
+		return parse(file);
+	}
+	catch (const x3::expectation_failure<std::string::iterator>& failure)
+	{
+		boost::format what("Expected %s but got %s");
+		what % failure.which();
+		what % *failure.where();
+		throw std::runtime_error(what.str());
+	}
 };
 
 auto const include_rule_def =
@@ -119,16 +110,19 @@ scene::description_t
 parse(const std::string& file)
 {
 	variable::descriptions_t variables;
-	const auto parser = make_parser<scene::description_t>(*def_rule > x3::lit("render") > scene::rule, variables);
-//	try
-//	{
-//	BOOST_LOG_TRIVIAL(debug) << "Parse file " << '"' << file << '"';
-//	}
-//	catch (...)
-//	{
-//		std::cerr << "Foo2" << std::endl;
-//	}
-	return parser(file);
+	try
+	{
+		BOOST_LOG_TRIVIAL(debug) << "Parse file " << '"' << file << '"';
+		const auto parse = make_parser<scene::description_t>(*def_rule > x3::lit("render") > scene::rule, variables);
+		return parse(file);
+	}
+	catch (const x3::expectation_failure<std::string::iterator>& failure)
+	{
+		boost::format what("Expected %s but got %s");
+		what % failure.which();
+		what % *failure.where();
+		throw std::runtime_error(what.str());
+	}
 }
 
 }
