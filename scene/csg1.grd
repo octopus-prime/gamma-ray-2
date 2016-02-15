@@ -1,6 +1,8 @@
 // CSG example
 
-include "scene/test.gri"
+include "scene/constant.gri"
+include "scene/surface.gri"
+include "scene/texture.gri"
 
 var sphere = Sphere {}
 
@@ -18,10 +20,10 @@ var csg = Object
 //csg.rotate(< 45, 45, 0>)
 
 var csg2 = csg
-csg2.translate(-3.5 * X)
+csg2.translate(-3.5 * x)
 
 var csg3 = csg
-csg3.translate(+3.5 * X)
+csg3.translate(+3.5 * x)
 
 csg.scale(<2, 2, 2>)
 
@@ -57,8 +59,8 @@ var scene = Scene
 {
 	camera = Camera
 	{
-		origin = -5 * Z
-		direction = Z
+		origin = -5 * z
+		direction = z
 	}
 
 	lights =

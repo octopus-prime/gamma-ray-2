@@ -1,0 +1,12 @@
+var x = <1,0,0>
+var y = <0,1,0>
+var z = <0,0,1>
+
+var red = <1,0,0>
+var green = <0,1,0>
+var blue = <0,0,1>
+var white = <1,1,1>
+var black = <0,0,0>
+var yellow = <1,1,0>
+var cyan = <0,1,1>
+var magenta	= <1,0,1>

@@ -1,0 +1,31 @@
+var aSphere = Quadric
+{
+	square =	<+1, +1, +1>
+	linear =	< 0,  0,  0>
+	absolute =	< 0,  0,  0>
+	constant =	-1
+}
+
+var CylinderX = Quadric
+{
+	square =	< 0, +1, +1>
+	linear =	< 0,  0,  0>
+	absolute =	< 0,  0,  0>
+	constant =	-1
+}
+
+var CylinderY = Quadric
+{
+	square =	<+1,  0, +1>
+	linear =	< 0,  0,  0>
+	absolute =	< 0,  0,  0>
+	constant =	-1
+}
+
+var CylinderZ = Quadric
+{
+	square =	<+1, +1,  0>
+	linear =	< 0,  0,  0>
+	absolute =	< 0,  0,  0>
+	constant =	-1
+}

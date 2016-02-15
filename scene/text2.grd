@@ -1,6 +1,8 @@
 // Text example
 
-include "scene/test.gri"
+include "scene/constant.gri"
+include "scene/surface.gri"
+include "scene/texture.gri"
 
 var cylinder = CylinderX
 cylinder.scale(<1,2,0.75>)
@@ -55,8 +57,8 @@ var scene = Scene
 {
 	camera = Camera
 	{
-		origin = -5 * Z
-		direction = Z
+		origin = -5 * z
+		direction = z
 	}
 
 	lights =

@@ -1,27 +1,29 @@
 // CSG example
 
-include "scene/test.gri"
+include "scene/constant.gri"
+include "scene/surface.gri"
+include "scene/texture.gri"
 
 var torusZ = Torus
 {
 	major = 2.0
 	minor = 0.5
 }
-//torusZ.rotate(180 * Y)
+//torusZ.rotate(180 * y)
 
 var torusX = Torus
 {
 	major = 2.0
 	minor = 0.5
 }
-torusX.rotate(90 * Y)
+torusX.rotate(90 * y)
 
 var torusY = Torus
 {
 	major = 2.0
 	minor = 0.5
 }
-torusY.rotate(90 * X)
+torusY.rotate(90 * x)
 
 var sphere = Sphere
 {
@@ -74,8 +76,8 @@ var scene = Scene
 {
 	camera = Camera
 	{
-		origin = -5 * Z
-		direction = Z
+		origin = -5 * z
+		direction = z
 	}
 
 	lights =
