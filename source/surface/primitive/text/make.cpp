@@ -189,10 +189,11 @@ make(const description_t& description)
 		if (error)
 			throw std::runtime_error("Can't get bbox. Code = " + std::to_string(error));
 
+		constexpr float delta = 1e-3f;
 		const box_t box
 		(
-			point_t ((bbox.xMin + xadvance) * factor, (bbox.yMin + yadvance) * factor, 0),
-			point_t ((bbox.xMax + xadvance) * factor, (bbox.yMax + yadvance) * factor, description.extrusion)
+			point_t ((bbox.xMin + xadvance) * factor - delta, (bbox.yMin + yadvance) * factor - delta,  -delta),
+			point_t ((bbox.xMax + xadvance) * factor + delta, (bbox.yMax + yadvance) * factor + delta, description.extrusion + delta)
 		);
 
 		Decomposer decompose(xadvance, yadvance);
