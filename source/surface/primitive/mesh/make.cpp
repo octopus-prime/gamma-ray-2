@@ -20,9 +20,11 @@ namespace mesh {
 instance_t
 make(const description_t& description)
 {
+	std::cout << sizeof(face_t) << std::endl;
+
 	BOOST_LOG_TRIVIAL(debug) << "Make surface mesh";
 
-	// Read vertextes and faces
+	// Read vertexes and faces
 	const reader_t read = open(description.file);
 
 	vertexes_t vertexes;
@@ -56,27 +58,24 @@ make(const description_t& description)
 		}
 	);
 
-	// Build mesh
-	mesh_t mesh = std::make_shared<basic_mesh_t>(std::move(vertexes), std::move(faces), std::move(normals));
-
-	// Build triangles and rtree
-	triangles_t triangles;
+	// Build rtree
 	rtree_t rtree;
 
 	geo::model::ring<point_t> ring;
 	ring.resize(3);
 
-	for (std::uint32_t i = 0; i < mesh->size(); ++i)
+	for (std::uint32_t i = 0; i < faces.size(); ++i)
 	{
-		triangles.emplace_back(mesh, i);
+		const face_t& face = faces[i];
 
 		for (std::size_t j = 0; j < 3; ++j)
-			ring[j] = to_point(mesh->point(i, j));
+			ring[j] = to_point(vertexes[face[j]]);
 
 		rtree.insert(value_t(geo::return_envelope<box_t>(ring), i));
 	}
 
-	model_t model(std::move(triangles), std::move(rtree));
+	// Done
+	model_t model(std::move(faces), std::move(vertexes), std::move(normals), std::move(rtree));
 	return std::make_shared<instance_impl_t<model_t>>(description.transformation, std::move(model));
 }
 
