@@ -11,6 +11,8 @@
 #include "reader.hpp"
 #include <tbb/parallel_for_each.h>
 #include <boost/log/trivial.hpp>
+#include <boost/geometry/io/wkt/wkt.hpp>
+#include <math/transformation.hpp>
 
 namespace rt {
 namespace surface {
@@ -20,8 +22,6 @@ namespace mesh {
 instance_t
 make(const description_t& description)
 {
-	std::cout << sizeof(face_t) << std::endl;
-
 	BOOST_LOG_TRIVIAL(debug) << "Make surface mesh";
 
 	// Read vertexes and faces
@@ -74,9 +74,12 @@ make(const description_t& description)
 		rtree.insert(value_t(geo::return_envelope<box_t>(ring), i));
 	}
 
+	const point_t c = geo::return_centroid<point_t>(rtree.bounds());
+	const matrix_t m = translation(-vector_t{c.get<0>(), c.get<1>(), c.get<2>(), 0});
+
 	// Done
 	model_t model(std::move(faces), std::move(vertexes), std::move(normals), std::move(rtree));
-	return std::make_shared<instance_impl_t<model_t>>(description.transformation, std::move(model));
+	return std::make_shared<instance_impl_t<model_t>>(description.transformation * m, std::move(model));
 }
 
 }
