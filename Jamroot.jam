@@ -10,6 +10,7 @@ project gamma-ray
 		<cxxflags>-Wno-maybe-uninitialized
 		<cxxflags>-Ofast
 		<cxxflags>-ffast-math
+		<include>/home/mike_gresens/workspace/spirit/include
 		<include>source
 		<define>NDEBUG
 		<define>BOOST_ALL_DYN_LINK
@@ -17,7 +18,7 @@ project gamma-ray
 
 exe gamma-ray
 	:
-		[ path.glob-tree source : *.cpp ]
+		[ path.glob-tree source : *.cpp *.c ]
 		/site-config//boost_program_options
 		/site-config//boost_filesystem
 		/site-config//boost_log

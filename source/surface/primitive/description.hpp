@@ -14,6 +14,7 @@
 #include "sor/description.hpp"
 #include "box/description.hpp"
 #include "text/description.hpp"
+#include "mesh/description.hpp"
 #include <boost/variant.hpp>
 
 namespace rt {
@@ -28,7 +29,8 @@ typedef boost::variant
 	torus::description_t,
 	sor::description_t,
 	box::description_t,
-	text::description_t
+	text::description_t,
+	mesh::description_t
 >
 description_t;
 
