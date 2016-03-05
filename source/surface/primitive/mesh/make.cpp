@@ -63,17 +63,28 @@ make(const description_t& description)
 	// Build rtree
 	rtree_t rtree;
 
-	geo::model::ring<point_t> ring;
-	ring.resize(3);
+//	geo::model::ring<point_t> ring;
+//	ring.resize(3);
 
-	for (std::uint32_t i = 0; i < faces.size(); ++i)
+	for (std::uint32_t index = 0; index < faces.size(); ++index)
 	{
-		const face_t& face = faces[i];
+		const face_t& face = faces[index];
 
-		for (std::size_t j = 0; j < 3; ++j)
-			ring[j] = to_point(vertexes[face[j]]);
+		const vector_t p0 = vertexes[face[0]];
+		const vector_t p1 = vertexes[face[1]];
+		const vector_t p2 = vertexes[face[2]];
 
-		rtree.insert(value_t(geo::return_envelope<box_t>(ring), i));
+		const vector_t min = _mm_min_ps(_mm_min_ps(p0, p1), p2);
+		const vector_t max = _mm_max_ps(_mm_max_ps(p0, p1), p2);
+
+		const box_t box(to_point(min), to_point(max));
+
+//		for (std::size_t j = 0; j < 3; ++j)
+//			ring[j] = to_point(vertexes[face[j]]);
+
+//		const box_t box = geo::return_envelope<box_t>(ring);
+
+		rtree.insert(std::make_pair(box, index));
 	}
 
 	size_t memory = vertexes.size() * sizeof(vector_t);
