@@ -22,6 +22,8 @@ namespace mesh {
 instance_t
 make(const description_t& description)
 {
+	constexpr size_t M = 1024 * 1024;
+
 	BOOST_LOG_TRIVIAL(debug) << "Make surface mesh";
 
 	// Read vertexes and faces
@@ -73,6 +75,13 @@ make(const description_t& description)
 
 		rtree.insert(value_t(geo::return_envelope<box_t>(ring), i));
 	}
+
+	size_t memory = vertexes.size() * sizeof(vector_t);
+	memory += faces.size() * sizeof(face_t);
+	memory += normals.size() * sizeof(vector_t);
+	memory += rtree.size() * sizeof(value_t);
+
+	BOOST_LOG_TRIVIAL(trace) << "Memory: " << memory / M << " MB";
 
 	const point_t c = geo::return_centroid<point_t>(rtree.bounds());
 	const matrix_t m = translation(-vector_t{c.get<0>(), c.get<1>(), c.get<2>(), 0});
