@@ -54,13 +54,15 @@ public:
 			if (side0 == side1)
 			{
 				const bool side2 = test(edge, p0, p2);
+
 				if (side0 == side2)
 				{
-					const vector_t normal = normalize(cross((p1 - p0), (p2 - p0)));
+					const vector_t normal = //normalize(
+							cross((p1 - p0), (p2 - p0));
+							//);
+					const float distance(dot(normal, p0));
+					const float t = (distance - dot(normal, ray.origin - O)) / dot(normal, ray.direction);
 
-					const float _distance(dot(normal, p0 - O));
-
-					const float t = (_distance - dot(normal, ray.origin - O)) / dot(normal, ray.direction);
 					if (ray.min <= t && t <= ray.max)
 					{
 						const vector_t p = ray.origin + ray.direction * t;
