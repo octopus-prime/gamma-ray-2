@@ -22,7 +22,7 @@ static_assert(BOOST_HW_SIMD_X86 >= BOOST_HW_SIMD_X86_SSE3_VERSION, "Minimum SSSE
 
 namespace rt {
 
-typedef __m128 vector_t;
+typedef __v4sf vector_t;
 enum axis_t {X, Y, Z, W};
 
 constexpr vector_t O {0, 0, 0, 1};
@@ -102,8 +102,29 @@ make_direction(const vector_t v)
 	return normalize(r);
 }
 
-vector_t
-cross(const vector_t x, const vector_t y);
+//vector_t
+//cross(const vector_t x, const vector_t y);
+
+//inline vector_t
+//cross(const vector_t v1, const vector_t v2)
+//{
+//	return vector_t
+//	{
+//		v1[1] * v2[2] - v1[2] * v2[1],
+//		v1[2] * v2[0] - v1[0] * v2[2],
+//		v1[0] * v2[1] - v1[1] * v2[0],
+//		0
+//	};
+//}
+
+inline vector_t
+cross(const vector_t v1, const vector_t v2)
+{
+	const vector_t t1 = _mm_shuffle_ps(v1, v1, _MM_SHUFFLE(3, 0, 2, 1));
+	const vector_t t2 = _mm_shuffle_ps(v2, v2, _MM_SHUFFLE(3, 0, 2, 1));
+	const vector_t r = _mm_sub_ps(_mm_mul_ps(v1, t2), _mm_mul_ps(t1, v2));
+	return _mm_shuffle_ps(r, r, _MM_SHUFFLE(3, 0, 2, 1));
+}
 
 }
 
