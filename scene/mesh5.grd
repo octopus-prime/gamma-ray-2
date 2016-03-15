@@ -1,0 +1,96 @@
+// Mesh example
+
+include "scene/constant.gri"
+include "scene/surface.gri"
+include "scene/texture.gri"
+
+var statuette = Mesh
+{
+	file = "../gamma-ray/mesh/statuette.ply"
+}
+statuette.scale(<0.01, 0.01, 0.01>)
+statuette.translate(-x)
+
+var lucy = Mesh
+{
+	file = "../gamma-ray/mesh/lucy.ply"
+}
+lucy.scale(<0.01, 0.01, 0.01>)
+lucy.rotate(-90 * x)
+lucy.translate(10 * z + 3 * x)
+
+var mesh1 = Object
+{
+	surface = statuette
+	texture = textureR
+}
+
+var mesh2 = Object
+{
+	surface = lucy
+	texture = textureM
+}
+
+var left1 = Object
+{
+	surface = Sphere { }
+	texture = textureG
+}
+left1.translate(<-3.5, +2, 0>)
+
+var left2 = Object
+{
+	surface = Sphere { }
+	texture = textureC
+}
+left2.translate(<-3.5, -2, 0>)
+
+var right1 = Object
+{
+	surface = Sphere { }
+	texture = textureB
+}
+right1.translate(<+3.5 , +2, 0>)
+
+var right2 = Object
+{
+	surface = Sphere { }
+	texture = textureY
+}
+right2.translate(<+3.5 , -2, 0>)
+
+var scene = Scene
+{
+	camera = Camera
+	{
+		origin = -5 * z
+		direction = z
+	}
+
+	lights =
+	[
+		Light
+		{
+			origin = <+5, +5, -5>
+			color = white * 200
+		}
+		Light
+		{
+			origin = <-5, +5, -5>
+			color = white * 200
+		}
+	
+	]
+
+	objects =
+	[
+		mesh1
+		mesh2
+		left1
+		right1
+		left2
+		right2
+	]
+}
+
+render(scene)
