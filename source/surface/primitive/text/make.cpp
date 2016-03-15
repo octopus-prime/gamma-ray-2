@@ -9,6 +9,7 @@
 #include "model.hpp"
 #include "../instance.hpp"
 #include <boost/regex/pending/unicode_iterator.hpp>
+#include <boost/range/adaptors.hpp>
 #include <boost/log/trivial.hpp>
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -155,16 +156,34 @@ get_glyph(const Face& face, const char32_t ch, const std::size_t sizeX, const st
 	return glyph;
 }
 
+template <typename Iterator>
+boost::u8_to_u32_iterator<Iterator, char32_t>
+make_u32_iterator(Iterator iterator)
+{
+	return boost::u8_to_u32_iterator<Iterator, char32_t>(iterator);
+}
+
+template <typename Range>
+auto
+make_u32_range(const Range& range)
+{
+	return boost::make_iterator_range
+	(
+		make_u32_iterator(range.begin()),
+		make_u32_iterator(range.end())
+	);
+}
+
 instance_t
 make(const description_t& description)
 {
 	BOOST_LOG_TRIVIAL(debug) << "Make surface text";
 
-	const std::u32string text
-	(
-		boost::u8_to_u32_iterator<std::string::const_iterator>(description.text.cbegin()),
-		boost::u8_to_u32_iterator<std::string::const_iterator>(description.text.cend())
-	);
+//	const std::u32string text
+//	(
+//		boost::u8_to_u32_iterator<std::string::const_iterator>(description.text.cbegin()),
+//		boost::u8_to_u32_iterator<std::string::const_iterator>(description.text.cend())
+//	);
 
 	const Library library = init_library();
 	const Face face = load_face(library, description.font);
@@ -175,9 +194,11 @@ make(const description_t& description)
 	rtree_t rtree;
 	std::size_t hits = 0;
 
-	for (std::size_t i = 0, n = 0; i < text.size(); ++i)
+//	for (std::size_t i = 0, n = 0; i < text.size(); ++i)
+	size_t n = 0;
+	for (char32_t ch : make_u32_range(description.text))
 	{
-		const char32_t ch = text[i];
+//		const char32_t ch = text[i];
 
 		if (ch != '?')
 		{

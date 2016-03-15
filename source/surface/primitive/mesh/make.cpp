@@ -9,9 +9,10 @@
 #include "model.hpp"
 #include "../instance.hpp"
 #include "reader.hpp"
-#include <tbb/parallel_for_each.h>
+//#include <tbb/parallel_for_each.h>
 #include <boost/log/trivial.hpp>
 #include <math/transformation.hpp>
+//#include <future>
 
 namespace rt {
 namespace surface {
@@ -37,27 +38,45 @@ make(const description_t& description)
 	normals_t normals(vertexes.size(), vector_t{0, 0, 0, 0});
 	rtree_t rtree;
 
-	for (std::uint32_t index = 0; index < faces.size(); ++index)
-	{
-		const face_t& face = faces[index];
+//	const auto create = [&]()
+//	{
+		for (std::uint32_t index = 0; index < faces.size(); ++index)
+		{
+			const face_t& face = faces[index];
 
-		const vector_t p0 = vertexes[face[0]];
-		const vector_t p1 = vertexes[face[1]];
-		const vector_t p2 = vertexes[face[2]];
+			const vector_t p0 = vertexes[face[0]];
+			const vector_t p1 = vertexes[face[1]];
+			const vector_t p2 = vertexes[face[2]];
 
-		const vector_t min = _mm_min_ps(_mm_min_ps(p0, p1), p2);
-		const vector_t max = _mm_max_ps(_mm_max_ps(p0, p1), p2);
+			const vector_t min = _mm_min_ps(_mm_min_ps(p0, p1), p2);
+			const vector_t max = _mm_max_ps(_mm_max_ps(p0, p1), p2);
 
-		const box_t box(to_point(min), to_point(max));
-		rtree.insert(std::make_pair(box, index));
+			const box_t box(to_point(min), to_point(max));
+			rtree.insert(std::make_pair(box, index));
 
-		const vector_t normal = cross((p1 - p0), (p2 - p0));
-		normals[face[0]] += normal;
-		normals[face[1]] += normal;
-		normals[face[2]] += normal;
-	}
+			const vector_t normal = cross((p1 - p0), (p2 - p0));
+			normals[face[0]] += normal;
+			normals[face[1]] += normal;
+			normals[face[2]] += normal;
+		}
+//	};
+//
+//	const float factor = 100.f / faces.size();
+//	std::future<void> future = std::async(std::launch::async, create);
+//
+//	for (;;)
+//	{
+//		const std::future_status status = future.wait_for(std::chrono::seconds(5));
+//		if (status == std::future_status::ready)
+//			break;
+//		const float percent = rtree.size() * factor;
+//		BOOST_LOG_TRIVIAL(debug) << boost::format("%6.2f") % percent << "% done";
+//	}
+//
+//	future.get();
 
-	tbb::parallel_for_each
+//	tbb::parallel_for_each
+	std::for_each
 	(
 		normals.begin(), normals.end(),
 		[](vector_t& normal)

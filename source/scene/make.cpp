@@ -10,7 +10,9 @@
 #include "light/make.hpp"
 #include "object/make.hpp"
 #include <boost/range/algorithm/transform.hpp>
-//#include <boost/log/trivial.hpp>
+#include <boost/log/trivial.hpp>
+#include <tbb/parallel_for_each.h>
+#include <mutex>
 
 namespace rt {
 namespace scene {
@@ -18,6 +20,8 @@ namespace scene {
 instance_t
 make(const description_t& description)
 {
+	BOOST_LOG_TRIVIAL(debug) << "Make scene";
+
 	camera::instance_t camera = camera::make(description.camera);
 
 	light::instances_t lights;
@@ -28,13 +32,24 @@ make(const description_t& description)
 		light::make
 	);
 
+	std::mutex mutex;
 	object::instances_t objects;
-	boost::transform
+	tbb::parallel_for_each
 	(
-		description.objects,
-		std::back_inserter(objects),
-		object::make
+		description.objects.begin(), description.objects.end(),
+		[&mutex, &objects](const object::description_t& description)
+		{
+			const object::instance_t instance = object::make(description);
+			std::unique_lock<std::mutex> lock(mutex);
+			objects.emplace_back(std::move(instance));
+		}
 	);
+//	boost::transform
+//	(
+//		description.objects,
+//		std::back_inserter(objects),
+//		object::make
+//	);
 
 //	object::instances_t objects;
 //	rtree_t rtree;

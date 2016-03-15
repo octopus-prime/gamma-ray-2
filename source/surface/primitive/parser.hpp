@@ -16,6 +16,7 @@
 #include "box/parser.hpp"
 #include "text/parser.hpp"
 #include "mesh/parser.hpp"
+#include "isosurface/parser.hpp"
 #include <boost/spirit/home/x3.hpp>
 
 namespace x3 = boost::spirit::x3;
@@ -42,6 +43,8 @@ auto const description_rule_def =
 		text::description_rule
 		|
 		mesh::description_rule
+		|
+		isosurface::description_rule
 		;
 
 BOOST_SPIRIT_DEFINE(description_rule);

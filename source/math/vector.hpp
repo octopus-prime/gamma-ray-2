@@ -58,15 +58,7 @@ dot(const vector_t x, const vector_t y)
 inline float
 length(const vector_t v)
 {
-//	const vector_t d = _mm_dp_ps(v, v, 0b11111111);
-//	const vector_t s = _mm_sqrt_ps(d);
-//	return s[0];
-#if BOOST_HW_SIMD_X86 >= BOOST_HW_SIMD_X86_SSE4_1_VERSION
-	const vector_t d = _mm_dp_ps(v, v, 0b01110001);
-	return std::sqrt(d[0]);
-#else
 	return std::sqrt(dot(v, v));
-#endif
 }
 
 inline vector_t
@@ -74,10 +66,12 @@ normalize(const vector_t v)
 {
 #if BOOST_HW_SIMD_X86 >= BOOST_HW_SIMD_X86_SSE4_1_VERSION
 	const vector_t d = _mm_dp_ps(v, v, 0b11111111);
-	const vector_t s = _mm_sqrt_ps(d);
-	return v / s;
+	const vector_t s = _mm_rsqrt_ps(d);
+	return v * s;
 #else
-	return v / length(v);
+	const vector_t d = dot(v, v);
+	const vector_t s = _mm_rsqrt_ss(d);
+	return v * s;
 #endif
 }
 
@@ -85,13 +79,7 @@ inline vector_t
 make_direction(const float x, const float y, const float z)
 {
 	const vector_t v = _mm_set_ps(0, z, y, x);
-#if BOOST_HW_SIMD_X86 >= BOOST_HW_SIMD_X86_SSE4_1_VERSION
-	const vector_t d = _mm_dp_ps(v, v, 0b11111111);
-	const vector_t s = _mm_sqrt_ps(d);
-	return v / s;
-#else
 	return normalize(v);
-#endif
 }
 
 inline vector_t
