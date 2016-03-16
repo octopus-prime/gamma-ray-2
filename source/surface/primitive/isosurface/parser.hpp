@@ -125,8 +125,8 @@ const auto value_action = [](auto& ctx)
 template <template <typename> class Op>
 struct calc_action
 {
-	template <typename Ctx>
-	void operator()(Ctx& ctx) const
+//	template <typename Ctx>
+	void operator()(auto& ctx) const
 	{
 		const function_t& function1 = x3::_val(ctx);
 		const function_t& function2 = x3::_attr(ctx);
