@@ -34,38 +34,28 @@ x3::rule<class expression_rule, vector_t> const expression_rule = "Expression";
 
 auto const set = [](auto& ctx)
 {
-	const vector_t vector {x3::_attr(ctx).x, x3::_attr(ctx).y, x3::_attr(ctx).z, 0};
+	const description_t& d = x3::_attr(ctx);
+	const vector_t vector {d.x, d.y, d.z, 0};
+	x3::_val(ctx) = vector;
+};
+auto const set2 = [](auto& ctx)
+{
+	const float v = x3::_attr(ctx);
+	const vector_t vector {v, v, v, 0};
 	x3::_val(ctx) = vector;
 };
 auto const neg = [](auto& ctx)
 {
 	x3::_val(ctx) = -x3::_attr(ctx);
 };
-template <typename Op>
-struct additive
+template <template <typename> class Op>
+struct calc_action
 {
 	void operator()(auto& ctx) const
 	{
-		x3::_val(ctx) = Op()(x3::_val(ctx), x3::_attr(ctx));
+		x3::_val(ctx) = Op<vector_t>()(x3::_val(ctx), x3::_attr(ctx));
 	}
 };
-auto const add = [](auto& ctx)
-{
-	x3::_val(ctx) = x3::_val(ctx) + x3::_attr(ctx);
-};
-auto const sub = [](auto& ctx)
-{
-	x3::_val(ctx) = x3::_val(ctx) - x3::_attr(ctx);
-};
-auto const mul = [](auto& ctx)
-{
-	x3::_val(ctx) = x3::_val(ctx) * x3::_attr(ctx);
-};
-auto const mul2 = [](auto& ctx)
-{
-	x3::_val(ctx) = boost::fusion::at_c<0>(x3::_attr(ctx)) * boost::fusion::at_c<1>(x3::_attr(ctx));
-};
-auto const div = [](auto& ctx) { x3::_val(ctx) = x3::_val(ctx) / x3::_attr(ctx); };
 
 auto const elements_rule_def =
 		x3::lit('<')
@@ -83,6 +73,8 @@ auto const elements_rule_def =
 auto const factor_rule_def =
 		elements_rule									[set]
 		|
+		x3::float_										[set2]
+		|
 		variable::get::rule								[variable::get::as<vector_t>()]
 		|
 		(x3::lit('(') > expression_rule > x3::lit(')')) [action::copy]
@@ -90,17 +82,15 @@ auto const factor_rule_def =
 		(x3::lit('+') > factor_rule) 					[action::copy]
 		|
 		(x3::lit('-') > factor_rule)					[neg]
-		|
-		(x3::float_ > x3::lit('*') > factor_rule)		[mul2]
 ;
 
 auto const term_rule_def =
 		factor_rule										[action::copy]
 		>
 		*(
-				(x3::lit('*') > x3::float_)				[mul]
+				(x3::lit('*') > factor_rule)			[calc_action<std::multiplies>()]
 				|
-				(x3::lit('/') > x3::float_)				[ ([](auto& ctx) { x3::_val(ctx) = x3::_val(ctx) / x3::_attr(ctx); }) ]
+				(x3::lit('/') > factor_rule)			[calc_action<std::divides>()]
 		)
 ;
 
@@ -108,9 +98,9 @@ auto const expression_rule_def =
 		term_rule 										[action::copy]
 		>
 		*(
-				(x3::lit('+') > term_rule)				[additive<std::plus<vector_t>>()]
+				(x3::lit('+') > term_rule)				[calc_action<std::plus>()]
 				|
-				(x3::lit('-') > term_rule)				[sub]
+				(x3::lit('-') > term_rule)				[calc_action<std::minus>()]
 		)
 ;
 
