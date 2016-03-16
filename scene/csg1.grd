@@ -7,10 +7,10 @@ include "scene/texture.gri"
 var sphere = Sphere {}
 
 var box = Box {}
-box.scale(<0.75, 0.75, 0.75>)
+box.scale(0.75)
 
 var cross = CylinderX + CylinderY + CylinderZ
-cross.scale(<0.5, 0.5, 0.5>)
+cross.scale(0.5)
 
 var csg = Object
 {
@@ -25,7 +25,7 @@ csg2.translate(-3.5 * x)
 var csg3 = csg
 csg3.translate(+3.5 * x)
 
-csg.scale(<2, 2, 2>)
+csg.scale(2)
 
 var left1 = Object
 {
