@@ -11,6 +11,7 @@
 #include <cmath>
 #include <limits>
 #include <algorithm>
+#include <numeric>
 #include <complex>
 #include <gsl/gsl_poly.h>
 #include "solve.hpp"
