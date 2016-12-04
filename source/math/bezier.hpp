@@ -8,6 +8,7 @@
 #pragma once
 
 #include <math/vector.hpp>
+#include <numeric>
 #include <boost/math/special_functions/factorials.hpp>
 
 namespace rt {
