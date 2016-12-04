@@ -60,11 +60,15 @@ reader_t::face_cb(p_ply_argument argument)
 reader_t
 open(const std::string& file)
 {
-	const p_ply pply = ply_open(file.c_str(), nullptr, 0, nullptr);
-    if (!pply)
+	const std::shared_ptr<t_ply_> ply
+	(
+		ply_open(file.c_str(), nullptr, 0, nullptr),
+		ply_close
+	);
+
+    if (!ply)
     	throw std::runtime_error("Can't open file: " + file);
 
-	const std::shared_ptr<t_ply_> ply(pply, ply_close);
     if (!ply_read_header(ply.get()))
     	throw std::runtime_error("Can't read header: " + file);
 
