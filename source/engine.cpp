@@ -14,6 +14,7 @@
 #include <boost/log/attributes/named_scope.hpp>
 #include <boost/format.hpp>
 #include <future>
+#include <thread>
 
 static rt::configuration_t
 configure(const int argc, const char* const argv[])
@@ -28,6 +29,8 @@ configure(const int argc, const char* const argv[])
 	BOOST_LOG_TRIVIAL(info) << "Resolution " << configuration.width << 'x' << configuration.height;
 	BOOST_LOG_TRIVIAL(info) << "Recursion " << configuration.depth;
 	BOOST_LOG_TRIVIAL(info) << "Antialiasing " << (configuration.aa ? "on" : "off");
+	BOOST_LOG_TRIVIAL(info) << "Concurrency " << std::thread::hardware_concurrency();
+
 	BOOST_LOG_TRIVIAL(info) << "Configuration done" << std::endl;
 
 	return std::move(configuration);
