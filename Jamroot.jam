@@ -3,16 +3,9 @@ import path ;
 project gamma-ray
 	:
 		requirements
-		<cxxflags>-std=c++14
-		<cxxflags>-ftemplate-depth=256
-		<cxxflags>-Wno-unused-local-typedefs
-		<cxxflags>-Wno-unused-variable
-		<cxxflags>-Wno-maybe-uninitialized
 		<cxxflags>-Ofast
 		<cxxflags>-ffast-math
-		<include>/home/mike_gresens/workspace/spirit/include
 		<include>source
-		<define>NDEBUG
 		<define>BOOST_ALL_DYN_LINK
 	;
 
