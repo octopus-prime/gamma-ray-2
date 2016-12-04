@@ -6,14 +6,14 @@ include "scene/texture.gri"
 
 var statuette = Mesh
 {
-	file = "../gamma-ray/mesh/statuette.ply"
+	file = "mesh/statuette.ply"
 }
 statuette.scale(<0.01, 0.01, 0.01>)
 statuette.translate(-x)
 
 var lucy = Mesh
 {
-	file = "../gamma-ray/mesh/lucy.ply"
+	file = "mesh/lucy.ply"
 }
 lucy.scale(<0.01, 0.01, 0.01>)
 lucy.rotate(-90 * x)
