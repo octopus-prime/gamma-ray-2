@@ -145,11 +145,8 @@ renderer_t make_renderer(const size_t width, const size_t height, const size_t d
 			const scene::camera::instance_t& camera = scene.camera();
 
 			image_t image(width, height);
-#if TBB_VERSION_MINOR >= 3
+
 			tbb::enumerable_thread_specific<hits_t> hits(1000);
-#else
-			tbb::enumerable_thread_specific<hits_t> hits(hits_t(1000));
-#endif
 			tbb::parallel_for
 			(
 				tbb::blocked_range2d<size_t, size_t>(0, height, 0, width),
@@ -191,11 +188,7 @@ renderer_t make_renderer(const size_t width, const size_t height, const size_t d
 			const scene::camera::instance_t& camera = scene.camera();
 
 			image_t image(width, height);
-#if TBB_VERSION_MINOR >= 3
 			tbb::enumerable_thread_specific<hits_t> hits(1000);
-#else
-			tbb::enumerable_thread_specific<hits_t> hits(hits_t(1000));
-#endif
 			tbb::parallel_for
 			(
 				tbb::blocked_range2d<size_t, size_t>(0, height, 0, width),
