@@ -14,7 +14,7 @@
 namespace rt {
 namespace rendering {
 
-constexpr float min = 5e-2f;
+constexpr float min = 1e-1f;
 constexpr float max = 5e+2f;
 
 float noise3(const vector_t v)
