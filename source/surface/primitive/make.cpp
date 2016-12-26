@@ -15,6 +15,7 @@
 #include "text/make.hpp"
 #include "mesh/make.hpp"
 #include "isosurface/make.hpp"
+#include "blob/make.hpp"
 
 namespace rt {
 namespace surface {
@@ -94,6 +95,13 @@ visitor::result_type
 visitor::operator()(const isosurface::description_t& description) const
 {
 	return isosurface::make(description);
+}
+
+template<>
+visitor::result_type
+visitor::operator()(const blob::description_t& description) const
+{
+	return blob::make(description);
 }
 
 }

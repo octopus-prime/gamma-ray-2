@@ -16,6 +16,7 @@
 #include "text/description.hpp"
 #include "mesh/description.hpp"
 #include "isosurface/description.hpp"
+#include "blob/description.hpp"
 #include <boost/variant.hpp>
 
 namespace rt {
@@ -32,7 +33,8 @@ typedef boost::variant
 	box::description_t,
 	text::description_t,
 	mesh::description_t,
-	isosurface::description_t
+	isosurface::description_t,
+	blob::description_t
 >
 description_t;
 
