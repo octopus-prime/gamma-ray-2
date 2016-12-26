@@ -113,4 +113,10 @@ to_point(const vector_t& vector)
 	return reinterpret_cast<const point_t&>(vector);
 }
 
+inline point_t&
+to_point(vector_t& vector)
+{
+	return reinterpret_cast<point_t&>(vector);
+}
+
 }
