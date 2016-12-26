@@ -25,8 +25,7 @@ make(const description_t& description)
 	if (description.distance)
 	{
 		const float distance = *description.distance;
-
-		static const vector_t normal = make_direction(0, 1, 0);
+		constexpr vector_t normal {0, 1, 0, 0};
 		transformation *= translation(normal * distance);
 	}
 

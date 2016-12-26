@@ -24,7 +24,7 @@ identity
 }};
 
 inline matrix_t
-transpose(const matrix_t& matrix)
+transpose(const matrix_t& matrix) noexcept
 {
 	matrix_t result = matrix;
 	_MM_TRANSPOSE4_PS(result[0], result[1], result[2], result[3]);
@@ -32,7 +32,7 @@ transpose(const matrix_t& matrix)
 }
 
 inline matrix_t
-operator+(const matrix_t& m1, const matrix_t& m2)
+operator+(const matrix_t& m1, const matrix_t& m2) noexcept
 {
 	return matrix_t
 	{{
@@ -44,7 +44,7 @@ operator+(const matrix_t& m1, const matrix_t& m2)
 }
 
 inline matrix_t
-operator*(const matrix_t& m, const float a)
+operator*(const matrix_t& m, const float a) noexcept
 {
 	return matrix_t
 	{{
@@ -56,7 +56,7 @@ operator*(const matrix_t& m, const float a)
 }
 
 inline vector_t
-operator*(const matrix_t& m, const vector_t& v)
+operator*(const matrix_t& m, const vector_t& v) noexcept
 {
 	return	m[0] * v[0] +
 			m[1] * v[1] +
@@ -65,16 +65,16 @@ operator*(const matrix_t& m, const vector_t& v)
 }
 
 inline vector_t
-operator*(const vector_t& v, const matrix_t& m)
+operator*(const vector_t& v, const matrix_t& m) noexcept
 {
 	return transpose(m) * v;
 }
 
 matrix_t
-operator*(const matrix_t& m1, const matrix_t& m2);
+operator*(const matrix_t& m1, const matrix_t& m2) noexcept;
 
 inline void
-operator*=(matrix_t& m1, const matrix_t& m2)
+operator*=(matrix_t& m1, const matrix_t& m2) noexcept
 {
 	m1 = m1 * m2;
 }
@@ -85,6 +85,8 @@ invert(const matrix_t& m);
 }
 
 namespace std {
+
 ostream&
 operator<<(ostream& s, const rt::matrix_t& m);
+
 }

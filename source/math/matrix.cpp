@@ -16,7 +16,7 @@ namespace rt {
 typedef bounded_matrix<float, 4, 4, column_major> temp_t;
 
 static temp_t
-convert(const matrix_t& matrix)
+convert(const matrix_t& matrix) noexcept
 {
 	temp_t result;
 	for (size_t i = 0; i < result.size1(); ++i)
@@ -26,7 +26,7 @@ convert(const matrix_t& matrix)
 }
 
 static matrix_t
-convert(const temp_t& matrix)
+convert(const temp_t& matrix) noexcept
 {
 	matrix_t result;
 	for (size_t i = 0; i < matrix.size1(); ++i)
@@ -36,7 +36,7 @@ convert(const temp_t& matrix)
 }
 
 matrix_t
-operator*(const matrix_t& matrix1, const matrix_t& matrix2)
+operator*(const matrix_t& matrix1, const matrix_t& matrix2) noexcept
 {
 	return convert(prod<temp_t>(convert(matrix1), convert(matrix2)));
 }
@@ -55,9 +55,11 @@ invert(const matrix_t& matrix)
 }
 
 namespace std {
+
 ostream&
 operator<<(ostream& s, const rt::matrix_t& m)
 {
 	return s << m[0] << ", " << m[1] << ", " << m[2] << ", " << m[3];
 }
+
 }
