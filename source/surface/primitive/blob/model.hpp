@@ -10,6 +10,7 @@
 #include "model_fwd.hpp"
 #include "geo/box.hpp"
 #include "geo/segment.hpp"
+#include <boost/none.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <boost/geometry/index/rtree.hpp>
 #include <boost/function_output_iterator.hpp>

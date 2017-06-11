@@ -7,7 +7,7 @@
 
 // Hack for Mac :(
 // Should be part of boost::gil !!
-#if defined(__APPLE__) && defined(__MACH__)
+#ifndef _WIN32
 #define png_infopp_NULL nullptr
 #define int_p_NULL nullptr
 #define png_bytep_NULL nullptr
