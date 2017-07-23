@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <numeric>
 #include <complex>
+#include <functional>
 #include <gsl/gsl_poly.h>
 #include "solve.hpp"
 
