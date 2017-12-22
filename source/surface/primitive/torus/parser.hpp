@@ -12,6 +12,9 @@
 #include <boost/spirit/home/x3.hpp>
 #include <boost/fusion/include/adapt_struct.hpp>
 
+#undef major
+#undef minor
+
 namespace x3 = boost::spirit::x3;
 
 BOOST_FUSION_ADAPT_STRUCT
